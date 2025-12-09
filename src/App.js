@@ -23,6 +23,10 @@ const entries = [
   },
 ];
 
+function Button({ children, onClick }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+
 function App() {
   return (
     <div className='App'>
@@ -34,10 +38,15 @@ function App() {
 function EntriesList() {
   return (
     <>
-      <div>
-        {entries.map(entry => (
+      {entries.map(entry => (
+        <div>
           <p>{entry.type}</p>
-        ))}
+          <p>{entry.dateTime}</p>
+        </div>
+      ))}
+
+      <div>
+        <Button>Add Entry</Button>
       </div>
     </>
   );
