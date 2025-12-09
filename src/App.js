@@ -31,6 +31,7 @@ function App() {
   return (
     <div className='App'>
       <EntriesList />
+      <DataTable entries={entries} />
     </div>
   );
 }
@@ -48,6 +49,25 @@ function EntriesList() {
       <div>
         <Button>Add Entry</Button>
       </div>
+    </>
+  );
+}
+
+function DataTable({ entries }) {
+  return (
+    <>
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Date Time</th>
+        </tr>
+        {entries.map(entry => (
+          <tr key={entry.id}>
+            <td>{entry.type}</td>
+            <td>{entry.dateTime}</td>
+          </tr>
+        ))}
+      </table>
     </>
   );
 }
