@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import './App.css';
 
-const entries = [
+const initialEntries = [
   {
     id: '550e8400-e29b-41d4-a716-446655440000',
     type: 'diaper',
@@ -28,15 +29,22 @@ function Button({ children, onClick }) {
 }
 
 function App() {
+  const [entries, setEntries] = useState(initialEntries);
+
+  function handleAddEntry(entry) {
+    setEntries(entries => [...entries, entry]);
+  }
+
   return (
     <div className='App'>
-      <EntriesList />
+      <EntriesList entries={entries} />
+      <FormAddEntry onAddEntry={handleAddEntry} />
       <DataTable entries={entries} />
     </div>
   );
 }
 
-function EntriesList() {
+function EntriesList({ entries }) {
   return (
     <>
       {entries.map(entry => (
@@ -45,10 +53,6 @@ function EntriesList() {
           <p>{entry.dateTime}</p>
         </div>
       ))}
-
-      <div>
-        <Button>Add Entry</Button>
-      </div>
     </>
   );
 }
@@ -69,6 +73,44 @@ function DataTable({ entries }) {
         ))}
       </table>
     </>
+  );
+}
+
+function FormAddEntry({ onAddEntry }) {
+  const [type, setType] = useState('feed');
+  const [dateTime, setDateTime] = useState(new Date().toISOString());
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!type || !dateTime) return;
+
+    const id = crypto.randomUUID();
+    const newEntry = {
+      id,
+      type,
+      dateTime,
+    };
+
+    onAddEntry(newEntry);
+
+    console.log(newEntry);
+
+    setType('feed');
+    setDateTime(new Date().toISOString());
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>Type</label>
+      <select value={type} onChange={e => setType(e.target.value)}>
+        <option value='feed'>Feed</option>
+        <option value='diaper'>Diaper</option>
+        <option value='nap'>Nap</option>
+      </select>
+
+      <Button>Add Entry</Button>
+    </form>
   );
 }
 
